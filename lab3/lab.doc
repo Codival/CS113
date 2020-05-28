@@ -1,0 +1,733 @@
+=TEX
+\documentclass{ffslides}
+\ffpage{25}{\numexpr 16/9}
+\usepackage{ProofPower}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\begin{document}
+\obeyspaces
+
+
+\normalpage{cs113 Lab3: By Amuldeep Dhillon}{
+
+=DUMP build.sh
+doctex lab.doc
+pptexenv latex lab.tex
+dvipdf lab.dvi
+=SH
+chmod 777 build.sh
+./build.sh
+=TEX
+}
+
+\normalpage{cs113 Lab3: Conditional}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \rightarrow q) $ \\
+\hline
+F & F & T \\
+F & T & T \\
+T & F & F \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+fun COND(false,q) = true | COND(true,q) = q;
+map COND truthValues2;
+val f1 = map COND truthValues2;
+val l1 = [(true),(true),(true)];
+fun tautology [] = true | tautology (x::xs) = x andalso tautology xs;
+tautology f1;
+tautology l1;
+=TEX
+}
+%\putfig{.6}{.2}{.3}{notGate}
+\putfig{.05}{.6}{.5}{conditionaltestSML}
+%\btext{.68}{.5}{.12}{\LARGE $R \equiv \sim P$}
+
+
+
+
+\normalpage{cs113 Lab3: Conditional}{
+\qi{Use ttgen to show equivalence of \\
+$p \rightarrow q$ and  $\lnot p \lor q$}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ ( \sim p \vee q) $ \\
+\hline
+F & F & T \\
+F & T & T \\
+T & F & F \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ ((p \rightarrow q) \leftrightarrow ( \sim p \vee q)) $ \\
+\hline
+F & F & T \\
+F & T & T \\
+T & F & T \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+fun COND(false,q) = true | COND(true,q) = q;
+map COND truthValues2;
+=TEX
+}
+%\putfig{.6}{.2}{.3}{notGate}
+\putfig{.05}{.6}{.5}{conditionaltestSML}
+%\btext{.68}{.5}{.12}{\LARGE $R \equiv \sim P$}
+
+
+
+
+
+
+
+\normalpage{cs113 Lab3: DeMorgan's Theorem for Conditionals}{
+
+\qi{$\sim(p \rightarrow q) \equiv p \land \sim q$}
+\begin{equation}
+\begin{split}
+\sim(p \rightarrow q) & \equiv \sim((\sim p) \lor q)\\
+                      & \equiv (\sim (\sim p)) \land \sim q\\
+                      & \equiv p \land \sim q
+\end{split}
+\end{equation}
+}
+
+
+
+
+
+
+
+\normalpage{cs113 Lab3: Problem 3.11}{
+
+\qi{$((p \lor q) \rightarrow r) \equiv (p \rightarrow r) \land (q \rightarrow r)$}
+\[ Law1: A \rightarrow B \equiv \sim A \lor B \]
+\begin{equation}
+\begin{split}
+((p \lor q) \rightarrow r) & \equiv (\sim (p \lor q)) \lor r \tag{Law1 with A + = (p \sim q)}\\
+                            & \equiv (\sim (\sim p)) \land \sim q\\
+                            & \equiv p \land \sim q
+\end{split}
+\end{equation}
+}
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Biconditional}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \rightarrow q) $ \\
+\hline
+F & F & T \\
+F & T & T \\
+T & F & F \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+fun BICOND(p,q) = p = q;
+map BICOND truthValues2;
+val f1 = map COND truthValues2;
+val l1 = [(true),(true),(true)];
+fun tautology [] = true | tautology (x::xs) = x andalso tautology xs;
+tautology f1;
+tautology l1;
+=TEX
+}
+%\putfig{.6}{.2}{.3}{notGate}
+\putfig{.05}{.6}{.5}{conditionaltestSML}
+%\btext{.68}{.5}{.12}{\LARGE $R \equiv \sim P$}
+
+\normalpage{cs113 Lab3 Valid Arguements}{
+
+\qi{Identify the premises and conclusion of the arguement}
+\qi{Construct a truth table including premises and conclusion}
+\qi{Find rows in which all premises are true}
+\qi{In each row of previous step, if the conslusion is true then the
+arguement is valid; otherwise it is invalid}
+
+=SML
+fun p1(p,q) = COND(p,q);
+fun p2(p,q) = q;
+fun c(p,q) = p;
+fun valid(p,q) = if p1(p,q) andalso p2(p,q) then c(p,q) else false;
+tautology (map valid truthValues2);
+}
+
+
+
+
+\normalpage{cs113 Lab3 Valid Arguements}{
+
+\qi{Identify the premises and conclusion of the arguement}
+\qi{Construct a truth table including premises and conclusion}
+\qi{Find rows in which all premises are true}
+\qi{In each row of previous step, if the conslusion is true then the
+arguement is valid; otherwise it is invalid}
+
+Example 4.3
+=SML
+fun p1(p,q) = COND(p,q);
+fun p2(p,q) = COND(q,p);
+fun c(p,q) = p orelse q;
+fun valid(p,q) = if p1(p,q) andalso p2(p,q) then c(p,q) else false;
+tautology (map valid truthValues2);
+}
+
+
+
+
+\normalpage{cs113 Lab3 Valid Arguements}{
+
+\qi{Identify the premises and conclusion of the arguement}
+\qi{Construct a truth table including premises and conclusion}
+\qi{Find rows in which all premises are true}
+\qi{In each row of previous step, if the conslusion is true then the
+arguement is valid; otherwise it is invalid}
+
+Example 4.10
+=SML
+fun p1(p,q) = COND(p,q);
+fun p2(p,q) = q;
+fun c(p,q) = p;
+fun valid(p,q) = if p1(p,q) andalso p2(p,q) then c(p,q) else false;
+tautology (map valid truthValues2);
+=TEX
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{comment}
+
+
+
+\normalpage{cs113 Lab2: And Gate}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ P \wedge Q $ \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+exception Error;
+fun AND(false,_) = false | AND(true,x) = x | AND(_,_) = raise Error;
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+map AND truthValues2;
+=TEX
+}
+\putfig{.65}{.2}{.2}{andGate}
+\putfig{.05}{.65}{.5}{andGateSML}
+\btext{.67}{.6}{.15}{\LARGE $R \equiv P \land Q$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Or Gate}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ P \vee Q $ \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+exception Error;
+fun OR(true,_) = true | OR(false,x) = x | OR(_,_) = raise Error;
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+map OR truthValues2;
+=TEX
+}
+\putfig{.65}{.2}{.2}{orGate}
+\putfig{.05}{.65}{.5}{orGateSML}
+\btext{.67}{.6}{.15}{\LARGE $R \equiv P \lor Q$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Nand Gate}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $  P \mid Q $ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+exception Error;
+fun NAND(false,_) = true | NAND(true,x) = NOT(x) | NAND(_,_) = raise Error;
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+map NAND truthValues2;
+=TEX
+}
+\putfig{.65}{.2}{.2}{nandGate}
+\putfig{.05}{.65}{.5}{nandGateSML}
+\btext{.67}{.6}{.15}{\LARGE $R \equiv P \mid Q$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Nor Gate}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $   P \downarrow Q $ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 0 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+exception Error;
+fun NOR(true,_) = false | NOR(false,x) = NOT(x) | NOR(_,_) = raise Error;
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+map NOR truthValues2;
+=TEX
+}
+\putfig{.65}{.2}{.2}{norGate}
+\putfig{.05}{.65}{.5}{norGateSML}
+\btext{.67}{.6}{.15}{\LARGE $R \equiv P \downarrow Q$}
+
+
+
+
+\normalpage{cs113 Lab2: Xor Gate}{
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ P \oplus Q $ \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+exception Error;
+fun XOR(false,x) = x | XOR(true,x) = NOT(x) | XOR(_,_) = raise Error;
+val truthValues2 = [(false,false),(false,true),(true,false),(true,true)];
+map XOR truthValues2;
+=TEX
+}
+\putfig{.65}{.2}{.25}{xorGate}
+\putfig{.05}{.65}{.5}{xorGateSML}
+\btext{.67}{.6}{.15}{\LARGE $R \equiv P \oplus Q$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.1}{
+
+\qi{Example 2.2 truth table and circuit}
+
+\begin{tabular}{|c|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ R $ & $ ((P \vee Q) \wedge (P \vee R)) $ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+fun ex22(P,Q,R) = AND(OR(P,Q),OR(P,R));
+val truthValues3 = [(false,false,false),(false,false,true),(false,true,false),(false,true,true),
+(true,false,false),(true,false,true),(true,true,false),(true,true,true)];
+map ex22 truthValues3;
+=TEX
+}
+\putfig{.6}{.6}{.3}{ex22}
+\putfig{.4}{.2}{.5}{ex22SML}
+\btext{.5}{.5}{.3}{\LARGE $S \equiv ((P \vee Q) \wedge (P \vee R))$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.2}{
+\qi{Circuit of $((P \wedge Q) \vee  \sim R)$}
+\begin{tabular}{|c|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ R $ & $ ((P \wedge Q) \vee  \sim R) $ \\
+\hline
+0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 1 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+fun p22(P,Q,R) = OR(AND(P,Q),NOT(R));
+val truthValues3 = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),
+(1,0,0),(1,0,1),(1,1,0),(1,1,1)];
+map p22 truthValues3;
+=TEX
+}
+\putfig{.6}{.6}{.3}{p22}
+\putfig{.4}{.2}{.5}{p22SML}
+\btext{.5}{.5}{.3}{\LARGE $S \equiv ((P \wedge Q) \vee  \sim R)$}
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.3}{
+\qi{Match the figure in the Book for Problem 2.3}
+\begin{tabular}{|c|c|c||c||c|}
+\hline
+$ P $ & $ Q $ & $ R $ & $ S $ & $ (P \land Q) \land (\sim R) $\\
+\hline
+1 & 1 & 1 & 0 & 0 \\
+1 & 1 & 0 & 1 & 1 \\
+1 & 0 & 1 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0\\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+\qi{Since the last two columns are identical \\ (Left from textbook), they are equivalent}
+
+=SML
+fun p23(P,Q,R) = AND(AND(P,Q),NOT(R));
+val truthValues3 = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),
+(1,0,0),(1,0,1),(1,1,0),(1,1,1)];
+map p23 truthValues3;
+=TEX
+}
+\putfig{.6}{.6}{.3}{p23}
+\putfig{.4}{.2}{.5}{p23SML}
+\btext{.5}{.5}{.3}{\LARGE $S \equiv ((P \land Q) \land  \sim R)$}
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.7}{
+\qi{Create the Truth Table for the given Circuit for Problem 2.7}
+
+
+
+\begin{tabular}{|c|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ R $ & $ (P \wedge  \sim Q) \vee (Q \wedge R) $ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+fun p27(P,Q,R) = OR(AND(P,NOT(Q)),AND(Q,R));
+val truthValues3 = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),
+(1,0,0),(1,0,1),(1,1,0),(1,1,1)];
+map p27 truthValues3;
+=TEX
+}
+\putfig{.6}{.6}{.3}{p27}
+\putfig{.4}{.2}{.5}{p27SML}
+\btext{.5}{.5}{.3}{\LARGE $S \equiv (P \wedge  \sim Q) \vee (Q \wedge R)$}
+
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.8}{
+\qi{Create the Truth Table for the exclusive nor for Problem 2.8}
+
+
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $  \sim (P \oplus Q) $ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+
+=SML
+fun p28(P,Q) = NOT(XOR(P,Q));
+val truthValues2 = [(0,0),(0,1),(1,0),(1,1)];
+map p28 truthValues2;
+=TEX
+}
+\putfig{.5}{.6}{.3}{p28}
+\putfig{.4}{.2}{.5}{p28SML}
+\btext{.5}{.5}{.2}{\LARGE $S \equiv \sim (P \oplus Q)$}
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.10}{
+\qi{Create the Circuit for the given Boolean Function for Problem 2.10}
+
+
+
+\begin{tabular}{|c|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ R $ & $ ((P \wedge Q) \vee ((Q \wedge R) \wedge (Q \vee R))) $ \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+
+
+=SML
+fun p210(P,Q,R) = OR(AND(P,Q),AND(AND(Q,R),OR(Q,R)));
+val truthValues3 = [(0,0,0),(0,0,1),(0,1,0),(0,1,1),
+(1,0,0),(1,0,1),(1,1,0),(1,1,1)];
+map p210 truthValues3;
+=TEX
+}
+\putfig{.6}{.6}{.3}{p210}
+\putfig{.45}{.2}{.5}{p210SML}
+\btext{.44}{.5}{.4}{\LARGE $S \equiv ((P \wedge Q) \vee ((Q \wedge R) \wedge (Q \vee R)))$}
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab2: Problem 2.14}{
+\qi{Prove the two Circuit are equivalent for Problem 2.14}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $ ((P \wedge Q) \vee ( \sim P \wedge  \sim Q)) $ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ P $ & $ Q $ & $  \sim (P \oplus Q) $ \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1 \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+\qi{Since the last column of both tables are identical \\
+the two expressions are equivalent}
+
+}
+\putfig{.5}{.2}{.3}{p214a}
+\putfig{.5}{.6}{.3}{p214b}
+
+
+
+\normalpage{cs113 Lab2: Problem 2.14 (Cont.)}{
+\qi{Prove the two Circuits are equivalent for Problem 2.14}
+
+
+
+=SML
+fun p214a(P,Q) = OR(AND(P,Q),AND(NOT(P),NOT(Q)));
+val truthValues2 = [(0,0),(0,1),(1,0),(1,1)];
+map p214a truthValues2;
+
+
+
+
+
+
+fun p214b(P,Q) = NOT(XOR(P,Q));
+val truthValues2 = [(0,0),(0,1),(1,0),(1,1)];
+map p214b truthValues2;
+=TEX
+}
+\putfig{.45}{.3}{.5}{p214aSML}
+\putfig{.45}{.6}{.5}{p214bSML}
+\btext{.1}{.5}{.47}{\LARGE $(P \wedge Q) \vee ( \sim P \wedge  \sim Q) \equiv \sim (P \oplus Q)$}
+
+
+
+
+\end{comment}
+\end{document}
+

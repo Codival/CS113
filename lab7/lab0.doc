@@ -1,0 +1,135 @@
+=TEX
+\documentclass{ffslides}
+\ffpage{25}{\numexpr 16/9}
+\usepackage{ProofPower,amsmath,mathtools,amssymb,venndiagram,verbatim}
+\begin{document}
+\obeyspaces
+
+%\begin{comment}
+
+\normalpage{cs113 Ch12/13 Sets}{
+Venn diagram of tv watchers
+A=Drama, B=Sports, C=Comedy $U=200$ \\ $A \cap B \setminus C = $
+\begin{venndiagram3sets}
+[
+labelOnlyA={10},labelOnlyB={20},labelOnlyC={25},
+ labelOnlyAB={20},labelOnlyAC={25},labelOnlyBC={40},
+ labelABC={30},labelNotABC={30}
+]
+\fillACapBNotC
+\end{venndiagram3sets}
+}
+%\end{comment}
+
+\normalpage{cs113 Lab Build Script}{
+=DUMP build.sh
+doctex lab.doc
+pptexenv latex lab.tex
+dvipdf lab.dvi
+=SH
+chmod 777 build.sh
+=TEX
+}
+
+
+
+\begin{comment}
+
+
+\normalpage{All the SML}{
+
+
+
+=SML
+(* how to define a set in SML? *)
+(* use a list *)
+val A = [3,1,2]; val B = []; val C = [2,3,1]; val D = [2,3,3,1,4];
+fun empty([]) = true | empty(_) = false;
+empty(A); empty(B);
+(* determine if some value is an element of a set *)
+fun element(e,[]) = false 
+  | element(e,(x::xs)) = x=e orelse element(e,(xs));
+element(3,A); element(4,A); element(4,C); element(3,C);
+
+(*Is one set a subset of another*)
+fun subset([],[]) = true
+  | subset([],(x::xs)) = true
+  | subset((x::xs),[]) = false
+  | subset((x::xs),(y::ys)) = element(x,(y::ys)) andalso subset(xs,(y::ys));
+subset(A,C); subset(B,A); subset(A,B); subset(A,D); subset(C,D);
+
+
+
+(* Are two sets equal *)
+fun equal(xs,ys) = subset(xs,ys) andalso subset(ys,xs);
+equal(A,B); equal(A,C); equal(A,D);
+val A = [1,3,5]; val B = [5,3,1];
+equal(A,B);
+fun properSubset(x,y) = subset(x,y) andalso not (equal(x,y));
+subset(A,B);
+properSubset(A,B);
+val x = 5;
+val A = []; val B = [x];
+subset(A,B);
+
+(* powerset set of all subsets *)
+PolyML.print_depth 128;
+val A = [1,3,5]; val B = [1,2]; 
+fun union([],ys) = ys | union(x::xs,ys) = 
+                        if element(x,ys) then union(xs,ys)
+                        else x::union(xs,ys);
+union(A,B);
+fun insert(x,[]) = [] | insert(x,y::ys) = union([x],y)::insert(x,ys);
+insert(3,[B]);
+fun powerset([]) = [[]] | powerset(x::xs) =
+                          union(insert(x,powerset(xs)),powerset(xs));
+powerset(A);
+(* cartesian product  set of pairs or tupels of any size *)
+val A = [1,2]; val B = [1,2]; val C = explode("ab");
+
+fun onepair(x,[]) = [] | onepair(x,y::ys) = (x,y)::onepair(x,ys)
+
+fun cartesian([],ys) = []
+   |cartesian(x::xs,ys) = onepair(x,ys) @ cartesian(xs,ys);
+
+cartesian(A,B);
+cartesian(A,C);
+=TEX
+}
+\end{comment}
+
+
+
+=SML
+(* reflexive relation *)
+val r = [(1,1),(2,2)]; (* if r is relation on A = [1,2] *)
+fun unzip [] = ([],[]) | unzip((x,y)::zs) =
+    let val(xs,ys) = unzip(zs)
+    in (x::xs,y::ys) end;
+unzip(r);
+fun domain(r) = #1(unzip(r));
+domain(r);
+(* identity of A=[1,2] = [(1,1),(2,2)] *)
+fun identity([]) = [] | identity(x::xs) = (x,x)::identity(xs);
+fun reflexive([]) = true 
+    | reflexive(r) = 
+        let val d = domain(r)
+            val i = identity(d)
+        in subset(i,r) end;
+
+reflexive(r); (* true or false *)
+val r = [(1,1),(2,3)];
+reflexive(r);
+val r = [(1,1),(2,2),(1,2)];
+reflexive(r);
+val A = [1,2]; val B = [1,2];
+reflexive(cartesian(A,B));
+fun twodivides(x) = x mod 2 = 0;
+twodivides(1); twodivides(2); twodivides(6);
+val C = [1,2,3,4]; (* expect [2,4] *)
+List.filter twodivides C;
+fun divides(x,y) = y mod x = 0;
+List.filter divides r;
+reflexive( List.filter divides r);
+=TEX
+\end{document}

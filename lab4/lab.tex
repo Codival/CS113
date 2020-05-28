@@ -1,0 +1,497 @@
+\def\VCDate{2017/10/19}\def\VCVersion{(Current)}
+\documentclass{ffslides}
+\ffpage{25}{\numexpr 16/9}
+\usepackage{ProofPower,amsmath,mathtools,amssymb}
+\usepackage{verbatim}
+\begin{document}
+\obeyspaces
+
+
+\normalpage{cs113 Lab4: By Amuldeep Dhillon}{
+
+\begin{GFT}{Text written to file build.sh}
+\+doctex lab.doc\\
+\+pptexenv latex lab.tex\\
+\+dvipdf lab.dvi\\
+\end{GFT}
+\begin{GFT}{Bourne Shell}
+\+chmod 777 build.sh\\
+\+./build.sh\\
+\end{GFT}
+}
+
+
+
+
+
+\normalpage{cs113 Lab4: Mapping Rules of Inference to Proof Power}{
+\begin{GFT}{SML}
+\+"Mapping Rules of Inference to Proof Power";\\
+\+val premise = asm\_rule;\\
+\+val modus\_ponens = \PrLE{}\_elim;\\
+\+val modus\_tollens = modus\_tollens\_rule;\\
+\+val disjunctive\_syllogism = \PrLC{}\_cancel\_rule;\\
+\+val double\_negation = \PrLD{}\_\PrLD{}\_elim;\\
+\+val disjunctive\_addition = \PrLC{}\_right\_intro;\\
+\+val conjunctive\_addition = \PrLB{}\_intro;\\
+\+val conjunctive\_simplification = \PrLB{}\_left\_elim;\\
+\+val conjunctive\_simplificationR = \PrLB{}\_right\_elim;\\
+\+val hypothetical\_syllogism = \PrLE{}\_trans\_rule;\\
+\+val double\_negative = \PrLD{}\_\PrLD{}\_elim;\\
+\+val double\_negativeI = \PrLD{}\_\PrLD{}\_intro;\\
+\+val demorgan\_disjunction = rewrite\_rule [\PrLD{}\_\PrLC{}\_thm];\\
+\+val demorgan\_conjunction = rewrite\_rule [\PrLD{}\_\PrLB{}\_thm];\\
+\end{GFT}
+}
+\putfig{.45}{.25}{.5}{rules}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Modus Ponens}{
+\qi{Modus Ponens}
+
+\begin{tabular}{l}
+$p \rightarrow q$ \\
+$p$ \\
+\hline
+$\therefore q$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Modus Ponens";\\
+\+val p1 = premise \PrKM{}p\PrLE{}q\PrKO{};\\
+\+val p2 = premise \PrKM{}p:BOOL\PrKO{};\\
+\+modus\_ponens p1 p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{mp}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Modus Tollens}{
+\qi{Modus Tollens}
+
+\begin{tabular}{l}
+$p \rightarrow q$ \\
+$\sim q$ \\
+\hline
+$\therefore \sim p$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Modus Tollens";\\
+\+val p1 = premise \PrKM{}p\PrLE{}q\PrKO{};\\
+\+val p2 = premise \PrKM{}\PrLD{}q:BOOL\PrKO{};\\
+\+modus\_tollens p1 p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{mt}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Disjunctive Addition}{
+\qi{Disjunctive Addition}
+
+\begin{tabular}{l}
+$p$ \\
+\hline
+$\therefore  p \lor q$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Disjunctive Addition";\\
+\+val p2 =  \PrKM{}q:BOOL\PrKO{};\\
+\+val p1 = premise \PrKM{}p:BOOL\PrKO{};\\
+\+disjunctive\_addition p2 p1;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{da}
+
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Conjunctive Addition}{
+\qi{Conjunctive Addition}
+
+\begin{tabular}{l}
+$p$ \\
+$q$ \\
+\hline
+$\therefore p \land q$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Conjunctive Addition";\\
+\+val p1 = premise \PrKM{}p:BOOL\PrKO{};\\
+\+val p2 = premise \PrKM{}q:BOOL\PrKO{};\\
+\+conjunctive\_addition p1 p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{ca}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Conjunctive Simplification}{
+\qi{Conjunctive Simplification}
+
+\begin{tabular}{l}
+$p \land q$ \\
+\hline
+$\therefore p$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Conjunctive Simplification";\\
+\+val p1 = premise \PrKM{}p \PrLB{} q\PrKO{};\\
+\+conjunctive\_simplification p1;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{cs}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Disjunctive Syllogism}{
+\qi{Disjunctive Syllogism}
+
+\begin{tabular}{l}
+$p \lor q$ \\
+$\sim q$ \\
+\hline
+$\therefore  p$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Disjunctive Syllogism";\\
+\+val p1 = premise \PrKM{}p\PrLC{}q\PrKO{};\\
+\+val p2 = premise \PrKM{}\PrLD{}q:BOOL\PrKO{};\\
+\+disjunctive\_syllogism p1 p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{ds}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Hypothetical Syllogism}{
+\qi{Hypothetical Syllogism}
+
+\begin{tabular}{l}
+$p \rightarrow q$ \\
+$q \rightarrow r$ \\
+\hline
+$\therefore p \rightarrow r$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Hypothetical Syllogism";\\
+\+val p1 = premise \PrKM{}p\PrLE{}q\PrKO{};\\
+\+val p2 = premise \PrKM{}q\PrLE{}r\PrKO{};\\
+\+hypothetical\_syllogism p1 p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{hs}
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Double Negative}{
+\qi{Double Negative}
+
+\begin{tabular}{l}
+$\sim \sim p$ \\
+\hline
+$\therefore p$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Double Negative";\\
+\+val p1 = premise \PrKM{}\PrLD{}\PrLD{}p\PrKO{};\\
+\+double\_negative p1;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{dn}
+
+
+
+
+
+\normalpage{cs113 Lab4: Rules of Inference: Demorgan's}{
+\qi{Demorgan's}
+
+\begin{tabular}{l}
+$\sim (p \land q)$ \\
+\hline
+$\therefore \sim p \lor \sim q$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Demorgan's";\\
+\+val p1 = premise \PrKM{}\PrLD{}(p\PrLB{}q)\PrKO{};\\
+\+demorgan\_conjunction p1;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{d}
+
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Problem 4.16}{
+\qi{Problem 4.16}
+
+\begin{tabular}{l}
+$\sim p \lor q \rightarrow r$ \\
+$s \lor \sim q$ \\
+$\sim t$ \\
+$p \rightarrow t$ \\
+$\sim p \land r \rightarrow \sim s$ \\
+\hline
+$\therefore  \sim q$
+\end{tabular}
+}
+\ctext{.6}{.1}{.45}{
+\begin{GFT}{SML}
+\+"Problem 4.16";\\
+\+val f = \PrKM{}q:BOOL\PrKO{}\\
+\+val p1 = premise \PrKM{}\PrLD{}p \PrLC{} q\PrLE{}r\PrKO{};\\
+\+val p2 = premise \PrKM{}s \PrLC{} \PrLD{}q \PrKO{};\\
+\+val p3 = premise \PrKM{}\PrLD{}t:BOOL\PrKO{};\\
+\+val p4 = premise \PrKM{}p \PrLE{} t\PrKO{};\\
+\+val p5 = premise \PrKM{}\PrLD{}p \PrLB{} r\PrLE{} \PrLD{}s\PrKO{};\\
+\+val r1 = modus\_tollens p4 p3;\\
+\+val r2 = disjunctive\_addition f r1;\\
+\+val r3 = modus\_ponens p1 r2;\\
+\+val r4 = conjunctive\_addition r1 r3;\\
+\+val r5 = modus\_ponens p5 r4;\\
+\+val r6 = disjunctive\_syllogism p2 r5;\\
+\end{GFT}
+}
+\putfig{.05}{.5}{.5}{4-16}
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Problem 4.18}{
+\qi{Problem 4.18}
+
+\begin{tabular}{l}
+$\sim(p \lor q) \rightarrow r$ \\
+$\sim(p)$ \\
+$\sim(r)$ \\
+\hline
+$\therefore q$
+\end{tabular}
+
+
+\begin{GFT}{SML}
+\+"Problem 4.18";\\
+\+val p1 = premise \PrKM{}\PrLD{}(p\PrLC{}q)\PrLE{}r\PrKO{};\\
+\+val p2 = premise \PrKM{}\PrLD{}p:BOOL\PrKO{};\\
+\+val p3 = premise \PrKM{}\PrLD{}r:BOOL\PrKO{};\\
+\+val r1 = modus\_tollens p1 p3;\\
+\+disjunctive\_syllogism (double\_negation r1) p2;\\
+\end{GFT}
+}
+\putfig{.4}{.2}{.5}{4-18}
+
+
+
+\normalpage{cs113 Lab4: Problem 4.19}{
+\qi{Problem 4.19}
+
+\begin{tabular}{l}
+$p \land q$ \\
+$p \rightarrow \sim (q \land r)$ \\
+$s \rightarrow r$ \\
+\hline
+$\therefore  \sim s$
+\end{tabular}
+}
+\ctext{.6}{.1}{.45}{
+\begin{GFT}{SML}
+\+"Problem 4.19";\\
+\+val p1 = premise \PrKM{}p \PrLB{} q\PrKO{};\\
+\+val p2 = premise \PrKM{}p \PrLE{} \PrLD{}(q \PrLB{} r)\PrKO{};\\
+\+val p3 = premise \PrKM{}s \PrLE{} r\PrKO{};\\
+\+val r1 = conjunctive\_simplification p1;\\
+\+val r2 = modus\_ponens p2 r1;\\
+\+val r3 = demorgan\_conjunction r2;\\
+\+val r4 = conjunctive\_simplificationR p1;\\
+\+val r5 = double\_negativeI r4;\\
+\+val r6 = disjunctive\_syllogism r3 r5;\\
+\+val r7 = modus\_tollens p3 r6;\\
+\end{GFT}
+}
+\putfig{.05}{.5}{.5}{4-19}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Predicate Calculus - Problem 5.8 a}{
+Problem 5.8 a \\
+Let D = \{-48, -14,-8,0,1,3,16,23,26,32,36\}
+Determine if this proposition is valid:\\
+$\forall x \in D$, if x is odd then $x > 0$
+
+\begin{GFT}{SML}
+\+"Problem 5.8 a";\\
+\+fun isOdd(x) = x mod 2 = 1;\\
+\+val D = [\Twiddles{}48, \Twiddles{}14,\Twiddles{}8,0,1,3,16,23,26,32,36];\\
+\+fun isGreater0 x = x > 0;\\
+\+fun tautology (x::xs) = x andalso tautology(xs)\\
+\+ | tautology ([]) = true;\\
+\+tautology (map isGreater0 (filter isOdd D));\\
+\end{GFT}
+\qi{It is true}
+}
+\putfig{.45}{.3}{.5}{5-8a}
+
+
+
+
+\normalpage{cs113 Lab4: Predicate Calculus - Problem 5.8 b}{
+Problem 5.8 b \\
+Let D = \{-48, -14,-8,0,1,3,16,23,26,32,36\}
+Determine if this proposition is valid:\\
+$\forall x \in D$, if x is less than zero then x is even
+
+\begin{GFT}{SML}
+\+"Problem 5.8 b";\\
+\+fun isEven(x) = x mod 2 = 0;\\
+\+val D = [\Twiddles{}48, \Twiddles{}14,\Twiddles{}8,0,1,3,16,23,26,32,36];\\
+\+fun isLesser0 x = x < 0;\\
+\+fun tautology (x::xs) = x andalso tautology(xs)\\
+\+ | tautology ([]) = true;\\
+\+tautology (map isEven (filter isLesser0 D));\\
+\end{GFT}
+\qi{It is true}
+}
+\putfig{.45}{.3}{.5}{5-8b}
+
+
+
+
+
+\normalpage{cs113 Lab4: Predicate Calculus - Problem 5.8 c}{
+Problem 5.8 c \\
+Let D = \{-48, -14,-8,0,1,3,16,23,26,32,36\}
+Determine if this proposition is valid:\\
+$\forall x \in D$, if x is even then $x <= 0$
+
+\begin{GFT}{SML}
+\+"Problem 5.8 c";\\
+\+fun isEven(x) = x mod 2 = 0;\\
+\+val D = [\Twiddles{}48, \Twiddles{}14,\Twiddles{}8,0,1,3,16,23,26,32,36];\\
+\+fun isLesserAnd0 x = x <= 0;\\
+\+fun tautology (x::xs) = x andalso tautology(xs)\\
+\+ | tautology ([]) = true;\\
+\+tautology (map isLesserAnd0 (filter isEven D));\\
+\end{GFT}
+
+\qi{It is false because the value 16, 32, and 36 are all counterexamples}
+}
+\putfig{.45}{.25}{.5}{5-8c}
+
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Predicate Calculus - Problem 5.8 d}{
+Problem 5.8 d \\
+Let D = \{-48, -14,-8,0,1,3,16,23,26,32,36\}
+Determine if this proposition is valid:\\
+if the ones digit of x is 2, then the tens digit is 3 or 4.
+
+\begin{GFT}{SML}
+\+"Problem 5.8 d";\\
+\+fun ones\_digit\_is\_2(x) = abs(x) mod 10 = 2;\\
+\+val D = [\Twiddles{}48, \Twiddles{}14,\Twiddles{}8,0,1,3,16,23,26,32,36];\\
+\+fun tens\_digit\_is\_3\_or\_4(x) = abs(x) div 10 = 3\\
+\+ orelse abs(x) div 10 = 4;\\
+\+fun tautology (x::xs) = x andalso tautology(xs)\\
+\+ | tautology ([]) = true;\\
+\+tautology (map tens\_digit\_is\_3\_or\_4 \\
+\+(filter ones\_digit\_is\_2 D));\\
+\end{GFT}
+\qi{It is true}
+}
+\putfig{.45}{.3}{.5}{5-8d}
+
+
+
+
+
+
+\normalpage{cs113 Lab4: Predicate Calculus - Problem 5.8 e}{
+Problem 5.8 e \\
+Let D = \{-48, -14,-8,0,1,3,16,23,26,32,36\}
+Determine if this proposition is valid:\\
+if the ones digit of x is 6, then the tens digit is 1 or 2.
+
+\begin{GFT}{SML}
+\+"Problem 5.8 e";\\
+\+fun ones\_digit\_is\_6(x) = abs(x) mod 10 = 6;\\
+\+val D = [\Twiddles{}48, \Twiddles{}14,\Twiddles{}8,0,1,3,16,23,26,32,36];\\
+\+fun tens\_digit\_is\_1\_or\_2(x) = abs(x) div 10 = 1\\
+\+ orelse abs(x) div 10 = 2;\\
+\+fun tautology (x::xs) = x andalso tautology(xs)\\
+\+ | tautology ([]) = true;\\
+\+tautology (map tens\_digit\_is\_1\_or\_2 \\
+\+(filter ones\_digit\_is\_6 D));\\
+\end{GFT}
+\qi{It is false because the value 36 is a counterexample}
+}
+\putfig{.45}{.3}{.5}{5-8e}
+
+
+
+
+
+
+
+\end{document}
+
+

@@ -1,0 +1,383 @@
+=TEX
+\documentclass{ffslides}
+\ffpage{25}{\numexpr 16/9}
+\usepackage{ProofPower}
+\begin{document}
+\obeyspaces
+
+\normalpage{cs113 Lab1::By: Amuldeep Dhillon}{
+cs113 lab1
+=DUMP build.sh
+doctex lab.doc
+pptexenv latex lab.tex
+dvipdf lab.dvi
+=SH
+chmod 777 build.sh
+=TEX
+}
+
+
+\normalpage{ch1 Proposiational Calculus (Conjuntion)}{
+Exploring compound propositions
+
+\qi{Conjunction: $p \land q$}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \wedge q) $ \\
+\hline
+F & F & F \\
+F & T & F \\
+T & F & F \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+=SML
+fun AND (false,x) = false | AND (true,x) = x;
+val truthValues = [(false,false),(false,true),(true,false),(true,true)];
+map AND truthValues;
+=TEX
+}
+\putfig{.4}{.2}{.5}{fig1}
+
+
+
+
+\normalpage{ch1 Proposiational Calculus (Disjunction)}{
+Exploring compound propositions
+
+\qi{Disjunction: $p \lor q$}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \wedge q) $ \\
+\hline
+F & F & F \\
+F & T & T \\
+T & F & T \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+=SML
+fun OR (true,x) = true | OR (false,x) = x;
+val truthValues = [(false,false),(false,true),(true,false),(true,true)];
+map OR truthValues;
+=TEX
+}
+\putfig{.4}{.2}{.5}{fig2}
+
+
+\normalpage{ch1 Proposiational Calculus (Negation)}{
+Exploring compound propositions
+
+\qi{Negation: $\sim p$}
+
+\begin{tabular}{|c||c|}
+\hline
+$ p $ & $  \sim p $ \\
+\hline
+F & T \\
+T & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+=SML
+fun NOT (true) = false | NOT(false) = true;
+val truthValues = [(false),(true)];
+map NOT truthValues;
+=TEX
+}
+\putfig{.41}{.2}{.5}{fig3}
+
+
+\normalpage{ch1 Proposiational Calculus (Exclusive OR)}{
+Exploring compound propositions
+
+\qi{Exclusive OR: $p \oplus q$}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \oplus q) $ \\
+\hline
+F & F & F \\
+F & T & T \\
+T & F & T \\
+T & T & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+=SML
+fun XOR(false,x) = x | XOR (true,x) = NOT x;
+val truthValues = [(false,false),(false,true),(true,false),(true,true)];
+map XOR truthValues;
+=TEX
+}
+\putfig{.4}{.2}{.5}{fig4}
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.18)}{
+Using compound propositions
+
+\qi{$p \oplus q \equiv (p \lor q) \land \sim (p \land q)$}
+
+\begin{tabular}{|c|c||c||c|}
+\hline
+$ p $ & $ q $ & $ (p \oplus q) $ & $ ((p \vee q) \wedge  \sim (p \wedge q)) $\\
+\hline
+F & F & F & F \\
+F & T & T & T \\
+T & F & T & T \\
+T & T & F & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+\qii{Since the last two colums of the truth table are the same, the two propositions are equivalent}
+
+=SML
+fun f1(x,y) = XOR(x,y);
+fun f2(x,y) = AND(OR(x,y),NOT(AND(x,y)));
+map f1 truthValues;
+map f2 truthValues;
+=TEX
+}
+\putfig{.4}{.11}{.5}{fig5}
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.13 a Part 1)}{
+Using compound propositions
+
+\qi{Simplify $p \oplus p$ and $p \oplus (p \oplus p)$}
+
+\begin{tabular}{|c||c||c|}
+\hline
+$ p $ & $ (p \oplus p) $ & $ F $\\
+\hline
+F & F & F \\
+T & F & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+\qii{Since the last two columns, "F" and "$ p \oplus p $" are identical the propositions are equivalent}
+
+=SML
+val truthValues2 = [(false,false),(true,true)];
+fun p13a1(x,y) = XOR(x,y);
+fun FALSE(x,y) = false;
+map p13a11 truthValues2;
+map p13a12 truthValues2;
+=TEX
+}
+\putfig{.4}{.5}{.5}{fig6}
+
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.13 a Part 2)}{
+Using compound propositions
+
+\qi{Simplify $p \oplus p$ and $p \oplus (p \oplus p)$}
+
+\begin{tabular}{|c||c|}
+\hline
+$ p $ & $ p \oplus (p \oplus p) $\\
+\hline
+F & F \\
+T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+\qii{Since the column "p" and "$p \oplus (p \oplus p) $ are identical the propositions are equivalent}
+
+=SML
+val truthValues2 = [(false,false),(true,true)];
+fun p13a21(x,y) = XOR(x,XOR(x,y));
+fun p13a22(x,y) = x;
+map p13a21 truthValues2;
+map p13a22 truthValues2;
+=TEX
+}
+\putfig{.4}{.5}{.5}{fig62}
+
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.13 b)}{
+Using compound propositions
+
+\qi{Is $(p \oplus q) \oplus r \equiv p \oplus (q \oplus r)$}
+
+\begin{tabular}{|c|c|c||c||c|}
+\hline
+$ p $ & $ q $ & $ r $ & $ ((p \oplus q) \oplus r) $  & $ (p \oplus (q \oplus r)) $ \\
+\hline
+F & F & F & F & F \\
+F & F & T & T & T \\
+F & T & F & T & T \\
+F & T & T & F & F \\
+T & F & F & T & T \\
+T & F & T & F & F \\
+T & T & F & F & F \\
+T & T & T & T & T\\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+\qii{Since the last columns are the same \\then the respective propositions are \\equivalent}
+
+}
+
+\ctext{.4}{.5}{.4}{
+=SML
+fun f13b1(x,y,z) = XOR(z,XOR(x,y));
+fun f13b2(x,y,z) = XOR(x,XOR(y,z));
+val truthValues3 = [(false,false,false),(false,false,true),
+(false,true,false),(false,true,true),(true,false,false),
+(true,false,true),(true,true,false),(true,true,true)];
+map f13b1 truthValues3;
+map f13b2 truthValues3;
+=TEX
+}
+\putfig{.4}{.1}{.5}{fig7}
+
+
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.13 c)}{
+Using compound propositions
+
+\qi{Is $(p \oplus q) \land r \equiv p(p \land r) \oplus (q \land r)$}
+
+\begin{tabular}{|c|c|c||c||c|}
+\hline
+$ p $ & $ q $ & $ r $ & $ ((p \oplus q) \wedge r) $ & $ ((p \wedge r) \oplus (q \wedge r)) $\\
+\hline
+F & F & F & F & F \\
+F & F & T & F & F \\
+F & T & F & F & F \\
+F & T & T & T & T \\
+T & F & F & F & F \\
+T & F & T & T & T \\
+T & T & F & F & F \\
+T & T & T & F & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+\qii{Since the last columns are the same \\then the respective propositions are \\ equivalent}
+
+}
+
+\ctext{.45}{.5}{.4}{
+=SML
+fun f13c1(x,y,z) = AND(XOR(x,y),z);
+fun f13c2(x,y,z) = XOR(AND(x,z),AND(y,z));
+map f13b1 truthValues3;
+map f13b2 truthValues3;
+=TEX
+}
+\putfig{.45}{.1}{.5}{fig8}
+
+
+
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.17)}{
+Using compound propositions
+
+\qi{Construct the truth table for $(p \land q) \lor (\sim p)$}
+
+\label{table:tt1}\begin{tabular}{|c|c||c|c|c|}
+\hline
+$ p $ & $ q $ & $ (p \wedge q) $ & $  \sim p $ & $ ((p \wedge q) \vee  \sim p) $ \\
+\hline
+F & F & F & T & T \\
+F & T & F & T & T \\
+T & F & F & F & F \\
+T & T & T & F & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+
+=SML
+fun p17(x,y) = OR(AND(x,y),NOT(x));
+map p17 truthValues;
+=TEX
+}
+\putfig{.45}{.2}{.5}{fig9}
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.19)}{
+Using compound propositions
+
+\qi{Show that $p \lor \sim(p \land q)$ is a tautology}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ (p \vee  \sim (p \wedge q)) $ \\
+\hline
+F & F & T \\
+F & T & T \\
+T & F & T \\
+T & T & T \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+\qii{Since the last column of the truth table is always "T", then the proposition is a tautology}
+
+
+=SML
+fun p19(x,y) = OR(x,NOT(AND(x,y)));
+map p19 truthValues;
+=TEX
+}
+\putfig{.4}{.2}{.5}{fig10}
+
+
+
+
+\normalpage{ch1 Proposiational Calculus (Problem 1.20)}{
+Using compound propositions
+
+\qi{Show that $\sim p \land (p \land q)$ is a contradiction}
+
+\begin{tabular}{|c|c||c|}
+\hline
+$ p $ & $ q $ & $ ( \sim p \wedge (p \wedge q)) $ \\
+\hline
+F & F & F \\
+F & T & F \\
+T & F & F \\
+T & T & F \\
+\hline
+\end{tabular}
+\label{table:tt1}
+
+
+\qii{Since the last column of the truth table is always "F", then the proposition is a contradiction}
+
+
+=SML
+fun p20(x,y) = AND(NOT(x),AND(x,y));
+map p20 truthValues;
+=TEX
+}
+\putfig{.4}{.2}{.5}{fig11}
+
+
+\end{document}
+

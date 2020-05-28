@@ -1,0 +1,24 @@
+\def\VCDate{2017/11/15}\def\VCVersion{(Current)}
+\documentclass{ffslides}
+\ffpage{25}{\numexpr 16/9}
+\usepackage{ProofPower,amsmath,mathtools,amssymb,venndiagram,verbatim}
+\begin{document}
+\obeyspaces
+
+
+\normalpage{cs113 Ch12/13 Sets}{
+Venn diagram of tv watchers
+A=Drama, B=Sports, C=Comedy $U=200$ \\ $A \cap B \setminus C = $
+\begin{venndiagram3sets}
+[
+labelOnlyA={10},labelOnlyB={20},labelOnlyC={25},
+ labelOnlyAB={20},labelOnlyAC={25},labelOnlyBC={40},
+ labelABC={30},labelNotABC={30}
+]
+\fillACapBNotC
+\end{venndiagram3sets}
+}
+
+
+
+\end{document}
